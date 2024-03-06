@@ -13,7 +13,10 @@ mod tests {
             Simplifier::simplify(Tokenizer::tokenize(
                 r#"
                 Add(
-                    Num(1),
+                    Exp(
+                        Num(2),
+                        Num(3)
+                    ),
                     Mul(
                         Num(2),
                         Num(3)

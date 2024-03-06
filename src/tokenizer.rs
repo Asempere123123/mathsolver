@@ -24,9 +24,25 @@ impl Tokenizer {
                 let (first, second) = Self::split_token(content);
                 return Token::Add(Rc::new(first), Rc::new(second));
             }
+            "Sub" => {
+                let (first, second) = Self::split_token(content);
+                return Token::Sub(Rc::new(first), Rc::new(second));
+            }
             "Mul" => {
                 let (first, second) = Self::split_token(content);
                 return Token::Mul(Rc::new(first), Rc::new(second));
+            }
+            "Div" => {
+                let (first, second) = Self::split_token(content);
+                return Token::Div(Rc::new(first), Rc::new(second));
+            }
+            "Exp" => {
+                let (first, second) = Self::split_token(content);
+                return Token::Exp(Rc::new(first), Rc::new(second));
+            }
+            "Rot" => {
+                let (first, second) = Self::split_token(content);
+                return Token::Rot(Rc::new(first), Rc::new(second));
             }
             other => panic!("Operator not known: {}", other),
         }
@@ -67,5 +83,9 @@ impl Tokenizer {
 pub enum Token {
     Num(f64),                  // A Number
     Add(Rc<Token>, Rc<Token>), // Addition
+    Sub(Rc<Token>, Rc<Token>), // Substraction
     Mul(Rc<Token>, Rc<Token>), // Multiplication
+    Div(Rc<Token>, Rc<Token>), // Division
+    Exp(Rc<Token>, Rc<Token>), // Exponentiation
+    Rot(Rc<Token>, Rc<Token>), // Nth root
 }
