@@ -18,7 +18,7 @@ impl Simplifier {
                         return Rc::new(Token::Num(a_value + b_value));
                     }
                 }
-                return Rc::new(Token::Add(a, b))
+                return Rc::new(Token::Add(a, b));
             }
             Token::Mul(ref a, ref b) => {
                 // Es un Rc clone
@@ -30,7 +30,7 @@ impl Simplifier {
                         return Rc::new(Token::Num(a_value * b_value));
                     }
                 }
-                return Rc::new(Token::Add(a, b))
+                return Rc::new(Token::Add(a, b));
             }
         }
     }
