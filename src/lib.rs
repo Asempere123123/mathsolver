@@ -12,6 +12,7 @@ pub enum Token {
     Exp(Rc<Token>, Rc<Token>), // Exponentiation
     Rot(Rc<Token>, Rc<Token>), // Nth root
     Inc,                       // Unkown value "x"
+    Equ(Rc<Token>, Rc<Token>), // Equality simbol. (Left side, Right side)
 }
 
 #[derive(Debug)]
@@ -31,11 +32,12 @@ mod tests {
             "{:?}",
             simplifier::simplify(tokenizer::tokenize(
                 r#"
-                Mul(
-                    Num(2),
-                    Inc,
-                    Num(3),
-                    Num(4)
+                Equ(
+                    Mul(
+                        Num(2),
+                        Num(3)
+                    ),
+                    Inc
                 )"#
             ))
         );

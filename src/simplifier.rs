@@ -117,5 +117,12 @@ fn simplify_expresion(expresion: Rc<Token>) -> Rc<Token> {
             return Rc::new(Token::Rot(a, b));
         }
         Token::Inc => return expresion,
+        Token::Equ(ref a, ref b) => {
+            // Es un Rc clone
+            let a = simplify_expresion(a.clone());
+            let b = simplify_expresion(b.clone());
+
+            return Rc::new(Token::Equ(a, b));
+        }
     }
 }
