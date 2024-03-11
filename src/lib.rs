@@ -12,6 +12,7 @@ pub enum Token {
     Div(Rc<Token>, Rc<Token>), // Division
     Exp(Rc<Token>, Rc<Token>), // Exponentiation
     Rot(Rc<Token>, Rc<Token>), // Nth root
+    Inc,                       // Unkown value "x"
 }
 
 #[derive(Debug)]
@@ -38,7 +39,7 @@ mod tests {
                     ),
                     Mul(
                         Num(2),
-                        Num(3)
+                        Inc
                     )
                 )"#
             ))

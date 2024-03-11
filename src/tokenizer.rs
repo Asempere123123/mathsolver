@@ -47,6 +47,7 @@ fn tokenize_operator(operation: &str) -> Token {
             let (first, second) = split_token(content);
             return Token::Rot(Rc::new(first), Rc::new(second));
         }
+        "Inc" => return Token::Inc,
         other => panic!("Operator not known: {}", other),
     }
 }

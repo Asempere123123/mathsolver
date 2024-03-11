@@ -38,7 +38,7 @@ fn simplify_expresion(expresion: Rc<Token>) -> Rc<Token> {
                     return Rc::new(Token::Num(a_value - b_value));
                 }
             }
-            return Rc::new(Token::Add(a, b));
+            return Rc::new(Token::Sub(a, b));
         }
         Token::Mul(ref a, ref b) => {
             // Es un Rc clone
@@ -50,7 +50,7 @@ fn simplify_expresion(expresion: Rc<Token>) -> Rc<Token> {
                     return Rc::new(Token::Num(a_value * b_value));
                 }
             }
-            return Rc::new(Token::Add(a, b));
+            return Rc::new(Token::Mul(a, b));
         }
         Token::Div(ref a, ref b) => {
             // Es un Rc clone
@@ -62,7 +62,7 @@ fn simplify_expresion(expresion: Rc<Token>) -> Rc<Token> {
                     return Rc::new(Token::Num(a_value / b_value));
                 }
             }
-            return Rc::new(Token::Add(a, b));
+            return Rc::new(Token::Div(a, b));
         }
         Token::Exp(ref a, ref b) => {
             // Es un Rc clone
@@ -74,7 +74,7 @@ fn simplify_expresion(expresion: Rc<Token>) -> Rc<Token> {
                     return Rc::new(Token::Num(a_value.powf(b_value)));
                 }
             }
-            return Rc::new(Token::Add(a, b));
+            return Rc::new(Token::Exp(a, b));
         }
         Token::Rot(ref a, ref b) => {
             // Es un Rc clone
@@ -86,7 +86,8 @@ fn simplify_expresion(expresion: Rc<Token>) -> Rc<Token> {
                     return Rc::new(Token::Num(b_value.powf(1.0 / a_value)));
                 }
             }
-            return Rc::new(Token::Add(a, b));
+            return Rc::new(Token::Rot(a, b));
         }
+        Token::Inc => return expresion,
     }
 }
