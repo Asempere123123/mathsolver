@@ -24,16 +24,12 @@ fn tokenize_operator(operation: &str) -> Token {
             return Token::Num(num);
         }
         "Add" => {
-            let (first, second) = split_token(content);
-            return Token::Add(Rc::new(first), Rc::new(second));
-        }
-        "Sub" => {
-            let (first, second) = split_token(content);
-            return Token::Sub(Rc::new(first), Rc::new(second));
+            let tokens = split_variable_token(content);
+            return Token::Add(tokens);
         }
         "Mul" => {
-            let (first, second) = split_token(content);
-            return Token::Mul(Rc::new(first), Rc::new(second));
+            let tokens = split_variable_token(content);
+            return Token::Mul(tokens);
         }
         "Div" => {
             let (first, second) = split_token(content);
@@ -62,6 +58,19 @@ fn split_token(content: &str) -> (Token, Token) {
     (first_token, second_token)
 }
 
+fn split_variable_token(content: &str) -> Vec<Rc<Token>> {
+    let mut tokens = Vec::new();
+    let content = &content[1..content.len() - 1];
+
+    let args = split_variable_token_string(content);
+
+    for arg in args {
+        tokens.push(Rc::new(tokenize_operator(arg)));
+    }
+
+    tokens
+}
+
 fn split_token_string(content: &str) -> (&str, &str) {
     let mut depth: u32 = 0;
     let mut idx = 0;
@@ -80,4 +89,27 @@ fn split_token_string(content: &str) -> (&str, &str) {
     }
 
     (&content[0..idx], &content[idx + 1..])
+}
+
+fn split_variable_token_string(content: &str) -> Vec<&str> {
+    let mut tokens = Vec::new();
+
+    let mut depth: u32 = 0;
+    let mut prev_idx = 0;
+    for (index, char) in content.chars().enumerate() {
+        match char {
+            '(' => depth += 1,
+            ')' => depth -= 1,
+            ',' => {
+                if depth == 0 {
+                    tokens.push(&content[prev_idx..index]);
+                    prev_idx = index + 1;
+                }
+            }
+            _ => (),
+        }
+    }
+    tokens.push(&content[prev_idx..]);
+
+    tokens
 }

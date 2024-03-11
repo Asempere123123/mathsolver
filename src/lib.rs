@@ -6,9 +6,8 @@ mod tokenizer;
 #[derive(Debug)]
 pub enum Token {
     Num(f64),                  // A Number
-    Add(Rc<Token>, Rc<Token>), // Addition
-    Sub(Rc<Token>, Rc<Token>), // Substraction
-    Mul(Rc<Token>, Rc<Token>), // Multiplication
+    Add(Vec<Rc<Token>>),       // Addition
+    Mul(Vec<Rc<Token>>),       // Multiplication
     Div(Rc<Token>, Rc<Token>), // Division
     Exp(Rc<Token>, Rc<Token>), // Exponentiation
     Rot(Rc<Token>, Rc<Token>), // Nth root
@@ -32,15 +31,11 @@ mod tests {
             "{:?}",
             simplifier::simplify(tokenizer::tokenize(
                 r#"
-                Add(
-                    Exp(
-                        Num(2),
-                        Num(3)
-                    ),
-                    Mul(
-                        Num(2),
-                        Inc
-                    )
+                Mul(
+                    Num(2),
+                    Inc,
+                    Num(3),
+                    Num(4)
                 )"#
             ))
         );

@@ -16,41 +16,69 @@ pub fn simplify(operation: Operation) -> Operation {
 fn simplify_expresion(expresion: Rc<Token>) -> Rc<Token> {
     match *expresion {
         Token::Num(_) => return expresion,
-        Token::Add(ref a, ref b) => {
-            // Es un Rc clone
-            let a = simplify_expresion(a.clone());
-            let b = simplify_expresion(b.clone());
+        Token::Add(ref tokens) => {
+            let mut simplified_tokens = Vec::new();
 
-            if let Token::Num(a_value) = *a {
-                if let Token::Num(b_value) = *b {
-                    return Rc::new(Token::Num(a_value + b_value));
+            // Es un Rc clone
+            for token in tokens {
+                simplified_tokens.push(simplify_expresion(token.clone()));
+            }
+
+            let mut count = 0.0;
+            let mut indices = Vec::new();
+            for (index, token) in simplified_tokens.iter().enumerate() {
+                if let Token::Num(value) = **token {
+                    count += value;
+                    indices.push(index);
                 }
             }
-            return Rc::new(Token::Add(a, b));
+            for i in indices.iter().rev() {
+                simplified_tokens.remove(*i);
+            }
+
+            if count != 0.0 {
+                simplified_tokens.push(Rc::new(Token::Num(count)));
+            }
+
+            if simplified_tokens.len() == 1 {
+                if let Token::Num(value) = *simplified_tokens[0] {
+                    return Rc::new(Token::Num(value));
+                }
+            }
+
+            Rc::new(Token::Add(simplified_tokens))
         }
-        Token::Sub(ref a, ref b) => {
-            // Es un Rc clone
-            let a = simplify_expresion(a.clone());
-            let b = simplify_expresion(b.clone());
+        Token::Mul(ref tokens) => {
+            let mut simplified_tokens = Vec::new();
 
-            if let Token::Num(a_value) = *a {
-                if let Token::Num(b_value) = *b {
-                    return Rc::new(Token::Num(a_value - b_value));
+            // Es un Rc clone
+            for token in tokens {
+                simplified_tokens.push(simplify_expresion(token.clone()));
+            }
+
+            let mut count = 1.0;
+            let mut indices = Vec::new();
+            for (index, token) in simplified_tokens.iter().enumerate() {
+                if let Token::Num(value) = **token {
+                    count *= value;
+                    indices.push(index);
                 }
             }
-            return Rc::new(Token::Sub(a, b));
-        }
-        Token::Mul(ref a, ref b) => {
-            // Es un Rc clone
-            let a = simplify_expresion(a.clone());
-            let b = simplify_expresion(b.clone());
+            for i in indices.iter().rev() {
+                simplified_tokens.remove(*i);
+            }
 
-            if let Token::Num(a_value) = *a {
-                if let Token::Num(b_value) = *b {
-                    return Rc::new(Token::Num(a_value * b_value));
+            if count != 0.0 {
+                simplified_tokens.push(Rc::new(Token::Num(count)));
+            }
+
+            if simplified_tokens.len() == 1 {
+                if let Token::Num(value) = *simplified_tokens[0] {
+                    return Rc::new(Token::Num(value));
                 }
             }
-            return Rc::new(Token::Mul(a, b));
+
+            Rc::new(Token::Mul(simplified_tokens))
         }
         Token::Div(ref a, ref b) => {
             // Es un Rc clone
